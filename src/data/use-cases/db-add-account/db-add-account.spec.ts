@@ -11,11 +11,11 @@ interface SutTypes {
 
 const makeAddAccountRepository = (): AddAccountRepository => {
     class AddAccountRepositoryStub implements AddAccountRepository {
-        async add (accountData: AddAccountModel): Promise<AccountModel> {
+        async add(accountData: AddAccountModel): Promise<AccountModel> {
             const fakeAccount = {
                 id: 'any_id',
                 name: 'any_name',
-                email: 'any_name@email.co',
+                email: 'any_email@email.co',
                 password: 'hashed_password'
             }
             return new Promise(resolve => resolve(fakeAccount))
@@ -24,12 +24,12 @@ const makeAddAccountRepository = (): AddAccountRepository => {
     return new AddAccountRepositoryStub()
 }
 const makeEncrypter = (): Encrypter => {
-   class EncrypterStub implements Encrypter {
-       async encrypt (plaintext: string): Promise<string> {
-        return new Promise(resolve => resolve('hashed_password'))
-       } 
-   } 
-   return new EncrypterStub()
+    class EncrypterStub implements Encrypter {
+        async encrypt(plaintext: string): Promise<string> {
+            return new Promise(resolve => resolve('hashed_password'))
+        }
+    }
+    return new EncrypterStub()
 }
 
 const makeSut = (): SutTypes => {
@@ -44,8 +44,8 @@ const makeSut = (): SutTypes => {
 }
 
 describe("DbAddAccount tests", () => {
-    it('Deve chamar o AddAccountRepository com os valores corretos', async()=>{
-        const { sut, addAccountRepositoryStub} = makeSut()
+    it('Deve chamar o AddAccountRepository com os valores corretos', async () => {
+        const { sut, addAccountRepositoryStub } = makeSut()
         const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
         const accountData = {
             name: 'any_name',
@@ -57,6 +57,23 @@ describe("DbAddAccount tests", () => {
             name: 'any_name',
             email: 'any_email@email.co',
             password: 'hashed_password'
-        })
-    })
+        });
+    });
+
+    it('Deve retornar os dados corretos de uma conta', async () => {
+        const { sut } = makeSut()
+        const accountData = {
+            name: 'any_name',
+            email: 'any_email@email.co',
+            password: 'any_password'
+        }
+        const account = await sut.add(accountData)
+        expect(account).toEqual({
+            id:'any_id',
+            name: 'any_name',
+            email: 'any_email@email.co',
+            password: 'hashed_password'
+        });
+    });
+    
 })
