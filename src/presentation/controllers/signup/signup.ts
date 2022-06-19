@@ -1,4 +1,4 @@
-import { badRequest, serverError } from "presentation/helpers"
+import { badRequest, ok, serverError } from "presentation/helpers"
 import { MissingParamError, InvalidParamError } from "presentation/errors"
 import { EmailValidator } from "presentation/protocols"
 import { HttpRequest, HttpResponse } from "presentation/protocols/http"
@@ -14,7 +14,7 @@ export class SignUpController implements Controller {
         this.addAccount = addAccount
     }
 
-    handle(request: HttpRequest): HttpResponse {
+    async handle(request: HttpRequest): Promise<HttpResponse> {
         try {
             const requireFields = ['name', 'email', 'password']
             for (const field of requireFields) {
@@ -33,10 +33,7 @@ export class SignUpController implements Controller {
                 password
             })
 
-            return {
-                statusCode: 200,
-                body: account
-            }
+            return ok(account)
 
         } catch (error) {
             return serverError()
