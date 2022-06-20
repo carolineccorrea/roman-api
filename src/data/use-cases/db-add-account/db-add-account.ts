@@ -1,7 +1,3 @@
-// import { AddAccount } from '@/domain/usecases'
-// import { Hasher, AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols'
-// import { AccountModel } from '@/domain/models'
-
 import { Hasher, AddAccountRepository, LoadAccountByEmailRepository, Encrypter } from "data/protocols"
 import { AddAccount, AddAccountModel } from "domain/use-cases/add-account"
 import { AccountModel } from "domain/models/account"
